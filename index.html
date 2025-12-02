@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> Rukky's Birthday Countdown 💖🎂✨</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      background: linear-gradient(135deg, #ffb6e6, #ff9ad8, #ffc6eb);
+      color: #fff;
+      font-family: "Comic Sans MS", "Poppins", cursive;
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.7);
+    }
+
+    #countdown {
+      font-size: 2rem;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 20px 40px;
+      border-radius: 25px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.5);
+    }
+
+    #message {
+      display: none;
+      margin-top: 30px;
+      font-size: 2.2rem;
+      font-weight: bold;
+      animation: pop 1s ease forwards;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.7); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Floating cute things */
+    .floaty {
+      position: absolute;
+      font-size: 2.5rem;
+      animation: floatUp linear infinite;
+      opacity: 0.85;
+      z-index: 999;
+      user-select: none;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Confetti (same as before but colored cute) */
+    .confetti {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      z-index: 9999;
+      top: -10px;
+      animation: fall linear infinite;
+      border-radius: 50%;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(720deg);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🎀 Rukky's Birthday Countdown 💖🎂✨ 🎀</h1>
+  <div id="countdown">Loading...</div>
+  <div id="message">I wish myself the very best this year 💖</div>
+
+  <script>
+    const birthdayMonth = 12;
+    const birthdayDay = 3;
+
+    function updateCountdown() {
+      const now = new Date();
+      let year = now.getFullYear();
+      let nextBirthday = new Date(year, birthdayMonth - 1, birthdayDay);
+
+      if (now > nextBirthday) {
+        nextBirthday = new Date(year + 1, birthdayMonth - 1, birthdayDay);
+      }
+
+      const diff = nextBirthday - now;
+
+      if (diff <= 0) {
+        document.getElementById("countdown").style.display = "none";
+        document.getElementById("message").style.display = "block";
+        startConfetti();
+        return;
+      }
+
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+
+      document.getElementById("countdown").textContent =
+        `${days}d ${hours}h ${minutes}m ${seconds}s`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    /* CONFETTI */
+    function startConfetti() {
+      for (let i = 0; i < 200; i++) {
+        const confetti = document.createElement("div");
+        confetti.classList.add("confetti");
+        confetti.style.left = Math.random() * 100 + "vw";
+        confetti.style.backgroundColor = randomColor();
+        confetti.style.animationDuration = (Math.random() * 3 + 2) + "s";
+        document.body.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 5000);
+      }
+    }
+
+    function randomColor() {
+      const colors = ["#fff", "#ffb6e6", "#ff8ac9", "#ffe1f4", "#ff9dd6"];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    /* FLOATING CUTE THINGS */
+    const floatItems = ["🎂", "🍰", "🧁", "✨", "💖", "🌸", "💗", "🎀"];
+
+    function spawnFloaty() {
+      const item = document.createElement("div");
+      item.classList.add("floaty");
+      item.textContent = floatItems[Math.floor(Math.random() * floatItems.length)];
+      item.style.left = Math.random() * 100 + "vw";
+      item.style.animationDuration = (Math.random() * 6 + 4) + "s";
+      item.style.fontSize = (Math.random() * 1.5 + 1.5) + "rem";
+
+      document.body.appendChild(item);
+
+      setTimeout(() => item.remove(), 9000);
+    }
+
+    setInterval(spawnFloaty, 500);
+  </script>
+
+</body>
+</html>
+
